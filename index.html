@@ -1,75 +1,292 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HAMOM YouTube Manager v3</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HAMOM YouTube Manager v3.1</title>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js"></script>
 <style>
 :root{--bg:#f3f4f6;--panel:#fff;--line:#d9dde3;--text:#171a20;--muted:#6f7680;--dark:#22262d;--red:#e62117;--soft:#f7f8fa;--ok:#eff8f1;--warn:#fff8e8;--err:#fff0f0}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,"Noto Sans KR",sans-serif;font-size:14px}.app{display:grid;grid-template-columns:210px 1fr;min-height:100vh}.side{background:#1f2329;color:#fff;padding:18px 14px;position:sticky;top:0;height:100vh}.brand{font-size:18px;font-weight:800;padding:5px 8px 20px;border-bottom:1px solid #3b4048}.nav{margin-top:16px}.nav button{width:100%;text-align:left;background:transparent;border:0;color:#cfd3da;padding:11px 10px;border-radius:4px;cursor:pointer;font-weight:700}.nav button.on,.nav button:hover{background:#343941;color:#fff}.main{padding:22px;max-width:1500px;width:100%;margin:auto}.topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}.topbar h1{font-size:24px;margin:0}.sub{color:var(--muted);font-size:12px}.actions{display:flex;gap:8px;flex-wrap:wrap}button{font:inherit;border:1px solid #cfd4da;background:#fff;color:#20242a;padding:9px 12px;border-radius:5px;font-weight:700;cursor:pointer}button.primary{background:var(--dark);color:#fff;border-color:var(--dark)}button.red{background:var(--red);color:#fff;border-color:var(--red)}button:disabled{opacity:.5;cursor:not-allowed}.status{border:1px solid #eadcae;background:var(--warn);padding:10px 12px;border-radius:5px;margin-bottom:14px}.status.ok{background:var(--ok);border-color:#cfe5d5}.status.err{background:var(--err);border-color:#efcaca}.tabs{display:flex;gap:0;border:1px solid var(--line);background:#fff;margin-bottom:14px;overflow:auto}.tab{border:0;border-right:1px solid var(--line);border-radius:0;padding:11px 16px;white-space:nowrap}.tab.on{background:#20242a;color:#fff}.layout{display:grid;grid-template-columns:minmax(0,1.5fr) 390px;gap:14px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;margin-bottom:14px}.ph{padding:13px 15px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}.ph h2,.ph h3{font-size:15px;margin:0}.pb{padding:15px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}label{display:block;font-weight:700;font-size:12px;margin-bottom:5px;color:#40454d}input,select,textarea{width:100%;border:1px solid #cfd4da;border-radius:4px;padding:9px 10px;font:inherit;background:#fff}textarea{min-height:90px;resize:vertical}.filebox{border:1px dashed #aeb5bf;background:#fafafa;padding:12px;border-radius:4px}.file-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.selected{margin-top:8px;font-size:12px;color:#39414b}.cal-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}.dn,.day{background:#fff}.dn{text-align:center;padding:8px 4px;font-size:11px;font-weight:700;color:var(--muted)}.day{min-height:92px;padding:7px}.day.out{background:#f7f7f7;color:#aaa}.day.today{box-shadow:inset 0 0 0 2px var(--red)}.ev{margin-top:4px;padding:4px 5px;background:#eef1f4;border-left:3px solid #707884;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ev.scheduled{border-left-color:#d57b00}.ev.done{border-left-color:#248542}.kpi{display:grid;grid-template-columns:1fr 1fr;gap:8px}.kpi div{border:1px solid var(--line);padding:10px;background:var(--soft)}.kpi b{display:block;font-size:18px;margin-top:2px}.small{font-size:12px;color:var(--muted)}.badge{display:inline-block;border:1px solid #d7dbe0;background:#f7f8fa;padding:3px 6px;margin:2px 2px 0 0;font-size:11px;border-radius:3px}.ai-result{border:1px solid var(--line);background:#fafafa;padding:10px;margin-top:10px}.ai-title{display:block;width:100%;text-align:left;margin:6px 0;background:#fff}.score{font-size:22px;font-weight:800}.hr{border-top:1px solid #e4e7eb;margin:12px 0}.progress{margin-top:9px;font-size:12px}.notice{font-size:11px;color:#7c838d;line-height:1.5}.hidden{display:none}@media(max-width:1050px){.app{grid-template-columns:1fr}.side{display:none}.layout{grid-template-columns:1fr}.main{padding:12px}}@media(max-width:650px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.day{min-height:70px;padding:4px}.topbar{align-items:flex-start;flex-direction:column}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,"Noto Sans KR",sans-serif;font-size:14px}
+.app{display:grid;grid-template-columns:210px 1fr;min-height:100vh}
+.side{background:#1f2329;color:#fff;padding:18px 14px;position:sticky;top:0;height:100vh}
+.brand{font-size:18px;font-weight:800;padding:5px 8px 20px;border-bottom:1px solid #3b4048}
+.nav{margin-top:16px}.nav button{width:100%;text-align:left;background:transparent;border:0;color:#cfd3da;padding:11px 10px;border-radius:4px;cursor:pointer;font-weight:700}
+.nav button.on,.nav button:hover{background:#343941;color:#fff}
+.main{padding:22px;max-width:1500px;width:100%;margin:auto}
+.topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}
+.topbar h1{font-size:24px;margin:0}.sub{color:var(--muted);font-size:12px}
+.topright{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;border:1px solid #cfd4da;background:#fff;color:#20242a;padding:9px 12px;border-radius:5px;font-weight:700;cursor:pointer}
+button.primary{background:var(--dark);color:#fff;border-color:var(--dark)}
+button.red{background:var(--red);color:#fff;border-color:var(--red)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.account-chip{display:none;align-items:center;gap:9px;border:1px solid var(--line);background:#fff;padding:6px 9px 6px 6px;border-radius:999px;min-width:0}
+.account-chip.show{display:flex}.account-chip img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1px solid #e1e4e8;background:#eee}
+.account-text{min-width:0;line-height:1.2}.account-text b{display:block;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}
+.account-text span{font-size:10px;color:#248542;font-weight:700}
+.status{border:1px solid #eadcae;background:var(--warn);padding:10px 12px;border-radius:5px;margin-bottom:14px}
+.status.ok{background:var(--ok);border-color:#cfe5d5}.status.err{background:var(--err);border-color:#efcaca}
+.tabs{display:flex;gap:0;border:1px solid var(--line);background:#fff;margin-bottom:14px;overflow:auto}
+.tab{border:0;border-right:1px solid var(--line);border-radius:0;padding:11px 16px;white-space:nowrap}.tab.on{background:#20242a;color:#fff}
+.layout{display:grid;grid-template-columns:minmax(0,1.5fr) 390px;gap:14px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;margin-bottom:14px}
+.ph{padding:13px 15px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ph h2,.ph h3{font-size:15px;margin:0}.pb{padding:15px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}
+label{display:block;font-weight:700;font-size:12px;margin-bottom:5px;color:#40454d}
+input,select,textarea{width:100%;border:1px solid #cfd4da;border-radius:4px;padding:9px 10px;font:inherit;background:#fff}
+textarea{min-height:90px;resize:vertical}
+.filebox{border:1px dashed #aeb5bf;background:#fafafa;padding:12px;border-radius:4px}.file-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.selected{margin-top:8px;font-size:12px;color:#39414b}
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.dn,.day{background:#fff}.dn{text-align:center;padding:8px 4px;font-size:11px;font-weight:700;color:var(--muted)}
+.day{min-height:92px;padding:7px}.day.out{background:#f7f7f7;color:#aaa}.day.today{box-shadow:inset 0 0 0 2px var(--red)}
+.ev{margin-top:4px;padding:4px 5px;background:#eef1f4;border-left:3px solid #707884;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev.scheduled{border-left-color:#d57b00}.ev.done{border-left-color:#248542}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:8px}.kpi div{border:1px solid var(--line);padding:10px;background:var(--soft)}
+.kpi b{display:block;font-size:18px;margin-top:2px}.small{font-size:12px;color:var(--muted)}
+.badge{display:inline-block;border:1px solid #d7dbe0;background:#f7f8fa;padding:3px 6px;margin:2px 2px 0 0;font-size:11px;border-radius:3px}
+.ai-result{border:1px solid var(--line);background:#fafafa;padding:10px;margin-top:10px}.ai-title{display:block;width:100%;text-align:left;margin:6px 0;background:#fff}
+.progress{margin-top:9px;font-size:12px}.notice{font-size:11px;color:#7c838d;line-height:1.5}.hidden{display:none}
+@media(max-width:1050px){.app{grid-template-columns:1fr}.side{display:none}.layout{grid-template-columns:1fr}.main{padding:12px}}
+@media(max-width:750px){.topbar{align-items:flex-start;flex-direction:column}.topright{justify-content:flex-start}.account-text b{max-width:120px}}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.day{min-height:70px;padding:4px}}
 </style>
 </head>
-<body><div class="app">
-<aside class="side"><div class="brand">HAMOM<br><span style="font-size:12px;color:#9ea5af">YouTube Manager v3</span></div><div class="nav"><button class="on">콘텐츠 운영</button><button onclick="document.getElementById('settings').scrollIntoView()">연동 설정</button><button onclick="document.getElementById('learningPanel').scrollIntoView()">채널 분석</button><button onclick="backup()">데이터 백업</button></div></aside>
+<body>
+<div class="app">
+<aside class="side">
+  <div class="brand">HAMOM<br><span style="font-size:12px;color:#9ea5af">YouTube Manager v3.1</span></div>
+  <div class="nav">
+    <button class="on">콘텐츠 운영</button>
+    <button onclick="document.getElementById('learningPanel').scrollIntoView()">채널 분석</button>
+    <button onclick="backup()">데이터 백업</button>
+  </div>
+</aside>
 <main class="main">
-<div class="topbar"><div><h1>YouTube 운영 관리자</h1><div class="sub">채널 분석 · 메타 최적화 · 파일 선택 · 예약 업로드</div></div><div class="actions"><button onclick="origin()">접속주소 확인</button><button class="primary" onclick="connect()">Google / YouTube 연결</button><button onclick="learn()">최근 영상 분석</button></div></div>
-<div id="status" class="status">Google OAuth Client ID를 저장한 뒤 YouTube를 연결하세요.</div>
-<div id="tabs" class="tabs"></div>
-<div class="layout"><section>
-<div class="panel"><div class="ph"><h2>콘텐츠 일정</h2><div class="cal-head"><button onclick="mv(-1)">◀</button><button onclick="today()">오늘</button><button onclick="mv(1)">▶</button><b id="mt"></b></div></div><div class="pb"><div id="cal" class="cal"></div></div></div>
-<div class="panel"><div class="ph"><h2>업로드 콘텐츠</h2><span class="small">로컬 PC 또는 Google Drive</span></div><div class="pb"><div class="grid">
-<div><label>운영 채널</label><select id="channel"></select></div><div><label>공개 방식</label><select id="privacy"><option value="scheduled">예약 공개</option><option value="private">비공개</option><option value="unlisted">일부공개</option><option value="public">즉시 공개</option></select></div>
-<div class="full"><label>영상 파일</label><div class="filebox"><input id="video" type="file" accept="video/*" onchange="localSelected()"><div class="file-actions"><button onclick="document.getElementById('video').click()">내 PC에서 선택</button><button onclick="pickDrive('video')">Google Drive에서 선택</button></div><div id="videoSelected" class="selected">선택된 영상 없음</div></div></div>
-<div><label>공개 날짜</label><input id="date" type="date"></div><div><label>공개 시간</label><input id="time" type="time" value="18:00"></div>
-<div><label>YouTube 카테고리</label><select id="cat"><option value="22">인물/블로그</option><option value="2">자동차</option><option value="27">교육</option><option value="28">과학/기술</option><option value="24">엔터테인먼트</option><option value="25">뉴스/정치</option></select></div><div><label>썸네일</label><input id="thumb" type="file" accept="image/*"></div>
-<div class="full"><label>영상 주제 / 핵심 내용</label><input id="topic" placeholder="예: 2026 국산차 판매순위 TOP10"></div>
-<div class="full"><div class="actions"><button class="primary" onclick="aiMeta()">AI 메타 생성</button><button onclick="basicMeta()">채널 학습 기반 생성</button></div><div id="aiBox" class="ai-result hidden"></div></div>
-<div class="full"><label>제목</label><input id="title" maxlength="100"></div><div class="full"><label>설명</label><textarea id="desc"></textarea></div><div class="full"><label>일반 태그 (쉼표 구분)</label><textarea id="tags"></textarea></div><div class="full"><label>해시태그</label><input id="hashtags" placeholder="#자동차 #신차 #KGM"></div>
-<div><button onclick="saveLocal()">캘린더 저장</button></div><div><button class="red" onclick="upload()">YouTube 업로드 / 예약등록</button></div>
-</div><div id="prog" class="progress"></div></div></div>
-</section><aside>
-<div class="panel" id="settings"><div class="ph"><h3>연동 설정</h3></div><div class="pb"><label>Google OAuth Client ID</label><input id="cid" placeholder="xxxx.apps.googleusercontent.com"><div style="height:8px"></div><label>Google API Key (Drive Picker용, 선택)</label><input id="gkey" type="password" placeholder="Google Cloud API Key"><div style="height:8px"></div><label>Gemini API Key (AI 메타용, 선택)</label><input id="gemkey" type="password" placeholder="Google AI Studio API Key"><div class="actions" style="margin-top:9px"><button class="primary" onclick="saveSettings()">설정 저장</button><button onclick="clearSettings()">초기화</button></div><div id="org" class="notice" style="margin-top:8px">API 키는 이 브라우저의 localStorage에만 저장됩니다. 공개 저장소에는 기록되지 않습니다.</div></div></div>
-<div class="panel"><div class="ph"><h3>연결된 YouTube 채널</h3></div><div class="pb"><div id="info" class="small">미연결</div><div class="kpi" style="margin-top:10px"><div>구독자<b id="sub">-</b></div><div>영상수<b id="vc">-</b></div><div>조회수<b id="views">-</b></div><div>일정<b id="ec">0</b></div></div></div></div>
-<div class="panel" id="learningPanel"><div class="ph"><h3>채널 분석</h3></div><div class="pb"><div id="learning" class="small">아직 분석하지 않았습니다.</div></div></div>
-<div class="panel"><div class="ph"><h3>백업 / 복원</h3></div><div class="pb"><div class="actions"><button onclick="backup()">JSON 백업</button><button onclick="document.getElementById('restore').click()">JSON 복원</button></div><input id="restore" type="file" accept="application/json" class="hidden" onchange="restoreData(event)"></div></div>
-</aside></div></main></div>
+  <div class="topbar">
+    <div>
+      <h1>YouTube 운영 관리자</h1>
+      <div class="sub">채널 분석 · 메타 최적화 · 파일 선택 · 예약 업로드</div>
+    </div>
+    <div class="topright">
+      <div id="accountChip" class="account-chip" title="현재 연결된 YouTube 채널">
+        <img id="accountAvatar" alt="채널 프로필">
+        <div class="account-text"><b id="accountName">연결된 채널</b><span>● 연결됨</span></div>
+      </div>
+      <div class="actions">
+        <button class="primary" onclick="connect()">Google / YouTube 연결</button>
+        <button onclick="learn()">최근 영상 분석</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="status" class="status">Google / YouTube 연결 버튼을 눌러 채널을 연결하세요.</div>
+  <div id="tabs" class="tabs"></div>
+
+  <div class="layout">
+    <section>
+      <div class="panel">
+        <div class="ph">
+          <h2>콘텐츠 일정</h2>
+          <div class="cal-head"><button onclick="mv(-1)">◀</button><button onclick="today()">오늘</button><button onclick="mv(1)">▶</button><b id="mt"></b></div>
+        </div>
+        <div class="pb"><div id="cal" class="cal"></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="ph"><h2>업로드 콘텐츠</h2><span class="small">로컬 PC 또는 Google Drive</span></div>
+        <div class="pb">
+          <div class="grid">
+            <div><label>운영 채널</label><select id="channel"></select></div>
+            <div><label>공개 방식</label><select id="privacy"><option value="scheduled">예약 공개</option><option value="private">비공개</option><option value="unlisted">일부공개</option><option value="public">즉시 공개</option></select></div>
+            <div class="full"><label>영상 파일</label><div class="filebox"><input id="video" type="file" accept="video/*" onchange="localSelected()"><div class="file-actions"><button onclick="document.getElementById('video').click()">내 PC에서 선택</button><button onclick="pickDrive('video')">Google Drive에서 선택</button></div><div id="videoSelected" class="selected">선택된 영상 없음</div></div></div>
+            <div><label>공개 날짜</label><input id="date" type="date"></div>
+            <div><label>공개 시간</label><input id="time" type="time" value="18:00"></div>
+            <div><label>YouTube 카테고리</label><select id="cat"><option value="22">인물/블로그</option><option value="2">자동차</option><option value="27">교육</option><option value="28">과학/기술</option><option value="24">엔터테인먼트</option><option value="25">뉴스/정치</option></select></div>
+            <div><label>썸네일</label><input id="thumb" type="file" accept="image/*"></div>
+            <div class="full"><label>영상 주제 / 핵심 내용</label><input id="topic" placeholder="예: 2026 국산차 판매순위 TOP10"></div>
+            <div class="full"><div class="actions"><button class="primary" onclick="aiMeta()">AI 메타 생성</button><button onclick="basicMeta()">채널 학습 기반 생성</button></div><div id="aiBox" class="ai-result hidden"></div></div>
+            <div class="full"><label>제목</label><input id="title" maxlength="100"></div>
+            <div class="full"><label>설명</label><textarea id="desc"></textarea></div>
+            <div class="full"><label>일반 태그 (쉼표 구분)</label><textarea id="tags"></textarea></div>
+            <div class="full"><label>해시태그</label><input id="hashtags" placeholder="#자동차 #신차 #KGM"></div>
+            <div><button onclick="saveLocal()">캘린더 저장</button></div>
+            <div><button class="red" onclick="upload()">YouTube 업로드 / 예약등록</button></div>
+          </div>
+          <div id="prog" class="progress"></div>
+        </div>
+      </div>
+    </section>
+
+    <aside>
+      <div class="panel">
+        <div class="ph"><h3>연결된 YouTube 채널</h3></div>
+        <div class="pb">
+          <div id="info" class="small">미연결</div>
+          <div class="kpi" style="margin-top:10px">
+            <div>구독자<b id="sub">-</b></div><div>영상수<b id="vc">-</b></div><div>조회수<b id="views">-</b></div><div>일정<b id="ec">0</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="learningPanel">
+        <div class="ph"><h3>채널 분석</h3></div>
+        <div class="pb"><div id="learning" class="small">아직 분석하지 않았습니다.</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="ph"><h3>백업 / 복원</h3></div>
+        <div class="pb"><div class="actions"><button onclick="backup()">JSON 백업</button><button onclick="document.getElementById('restore').click()">JSON 복원</button></div><input id="restore" type="file" accept="application/json" class="hidden" onchange="restoreData(event)"></div>
+      </div>
+    </aside>
+  </div>
+</main>
+</div>
+
 <script>
+const OAUTH_CLIENT_ID='523521887355-rlgio9gdt2pgpc7cj9q2qpmhe31b45da.apps.googleusercontent.com';
 const CH=['하맘자동차마케팅','하맘부동산마케팅','데오럭스','대학합격의길','하맘스튜디오'];
 const DEF={
 '하맘자동차마케팅':{suffix:'| 자동차 핵심정보',desc:"자동차 핵심정보를 쉽고 빠르게 정리해드립니다.\n\n문의: 카카오톡 '하맘'",tags:'자동차,신차,국산차,수입차,자동차정보,하맘자동차마케팅',cat:'2'},
 '하맘부동산마케팅':{suffix:'| 부동산 핵심정리',desc:"부동산 시장과 실거래 핵심정보를 정리해드립니다.\n\n문의: 카카오톡 '하맘'",tags:'부동산,아파트,실거래가,부동산정보,하맘부동산마케팅',cat:'22'},
 '데오럭스':{suffix:'| 입시 핵심포인트',desc:"대치동 입시컨설팅 데오럭스\n\n입시문의: 카카오톡 '데오럭스'\n컨텐츠 문의: 카카오톡 '하맘'",tags:'데오럭스,대치동입시컨설팅,입시컨설팅,수시,정시,면접,대학입시',cat:'27'},
 '대학합격의길':{suffix:'| 대학입시 핵심정리',desc:"대학입시 핵심정보를 빠르게 정리해드립니다.\n\n입시문의: 카카오톡 '데오럭스'\n컨텐츠 문의: 카카오톡 '하맘'",tags:'대학합격의길,대학입시,수시,정시,입시정보,대학',cat:'27'},
-'하맘스튜디오':{suffix:'| 콘텐츠 제작',desc:"영상과 콘텐츠 제작 정보를 소개합니다.\n\n컨텐츠 문의: 카카오톡 '하맘'",tags:'영상제작,콘텐츠제작,숏폼,유튜브콘텐츠,하맘스튜디오',cat:'28'}};
-let active=CH[0],viewDate=new Date(),token='',tokenClient=null,yt=null,driveFile=null,pickerMode='video';
-const $=id=>document.getElementById(id),K=s=>'hamom_v3_'+s,R=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},W=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
-function setStatus(t,c=''){let e=$('status');e.textContent=t;e.className='status'+(c?' '+c:'')}
-function init(){cid.value=localStorage.getItem(K('cid'))||'';gkey.value=localStorage.getItem(K('gkey'))||'';gemkey.value=localStorage.getItem(K('gemkey'))||'';date.value=ds(new Date());renderTabs();renderCal();renderLearning();updateEC()}
-function renderTabs(){tabs.innerHTML='';channel.innerHTML='';CH.forEach(c=>{let b=document.createElement('button');b.textContent=c;b.className='tab '+(c===active?'on':'');b.onclick=()=>{active=c;renderTabs();renderCal();renderLearning();updateEC()};tabs.appendChild(b);let o=document.createElement('option');o.value=o.textContent=c;channel.appendChild(o)});channel.value=active;cat.value=DEF[active].cat}
-function saveSettings(){let c=cid.value.trim();if(!c)return alert('Google OAuth Client ID를 입력하세요.');localStorage.setItem(K('cid'),c);localStorage.setItem(K('gkey'),gkey.value.trim());localStorage.setItem(K('gemkey'),gemkey.value.trim());setStatus('설정을 저장했습니다.','ok')}
-function clearSettings(){['cid','gkey','gemkey'].forEach(x=>localStorage.removeItem(K(x)));cid.value=gkey.value=gemkey.value='';setStatus('연동 설정을 초기화했습니다.')}
-function origin(){org.textContent='현재 Origin: '+location.origin+' · Google Cloud 승인된 JavaScript 원본과 같아야 합니다.'}
-function connect(){let c=cid.value.trim();if(!c)return alert('Client ID를 먼저 저장하세요.');if(!window.google?.accounts?.oauth2)return alert('Google 로그인 모듈 로딩 중입니다.');tokenClient=google.accounts.oauth2.initTokenClient({client_id:c,scope:'https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/drive.readonly',callback:async r=>{if(r.error)return setStatus('인증 실패: '+r.error,'err');token=r.access_token;setStatus('Google 인증 완료 · YouTube 확인 중…','ok');await loadYT()}});tokenClient.requestAccessToken({prompt:'consent'})}
-async function api(u,o={}){o.headers=Object.assign({},o.headers||{},token?{Authorization:'Bearer '+token}:{});let r=await fetch(u,o),t=await r.text(),j={};try{j=JSON.parse(t)}catch{}if(!r.ok)throw Error(j.error?.message||t||'API 오류');return j}
-async function loadYT(){try{let j=await api('https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&mine=true');yt=j.items?.[0];if(!yt)throw Error('YouTube 채널을 찾지 못했습니다.');info.innerHTML='<b>'+esc(yt.snippet.title)+'</b><br>채널 ID: '+esc(yt.id);sub.textContent=n(yt.statistics.subscriberCount);vc.textContent=n(yt.statistics.videoCount);views.textContent=n(yt.statistics.viewCount);setStatus('YouTube 연결 완료: '+yt.snippet.title,'ok')}catch(e){setStatus('연결 실패: '+e.message,'err')}}
-function localSelected(){driveFile=null;let f=video.files[0];videoSelected.textContent=f?('PC 파일: '+f.name+' · '+mb(f.size)):'선택된 영상 없음'}
-function pickDrive(mode){if(!token)return alert('먼저 Google / YouTube 연결을 완료하세요.');let key=gkey.value.trim();if(!key)return alert('연동 설정에 Google API Key를 입력하세요. Google Picker API용입니다.');pickerMode=mode;gapi.load('picker',()=>{let view=new google.picker.DocsView(google.picker.ViewId.DOCS_VIDEOS);view.setIncludeFolders(true);let p=new google.picker.PickerBuilder().addView(view).setOAuthToken(token).setDeveloperKey(key).setCallback(pickerCallback).build();p.setVisible(true)})}
-async function pickerCallback(data){if(data.action!==google.picker.Action.PICKED)return;let d=data.docs?.[0];if(!d)return;try{setStatus('Google Drive 파일 준비 중…');let meta=await api('https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(d.id)+'?fields=id,name,mimeType,size');driveFile={id:meta.id,name:meta.name,mimeType:meta.mimeType,size:Number(meta.size||0)};video.value='';videoSelected.textContent='Drive 파일: '+driveFile.name+(driveFile.size?' · '+mb(driveFile.size):'');setStatus('Google Drive 영상 선택 완료','ok')}catch(e){setStatus('Drive 파일 선택 실패: '+e.message,'err')}}
-async function getVideoFile(){if(video.files[0])return video.files[0];if(!driveFile)return null;setStatus('Google Drive에서 영상을 불러오는 중…');let r=await fetch('https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(driveFile.id)+'?alt=media',{headers:{Authorization:'Bearer '+token}});if(!r.ok)throw Error('Drive 영상 다운로드 실패');let b=await r.blob();return new File([b],driveFile.name,{type:driveFile.mimeType||b.type||'video/mp4'})}
-async function learn(){if(!token||!yt)return alert('먼저 YouTube 연결을 완료하세요.');try{setStatus('최근 영상 50개 성과 분석 중…');let pl=yt.contentDetails.relatedPlaylists.uploads,p=await api('https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&maxResults=50&playlistId='+encodeURIComponent(pl)),ids=(p.items||[]).map(x=>x.contentDetails.videoId);if(!ids.length)throw Error('최근 영상이 없습니다.');let v=await api('https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id='+ids.join(',')),vs=(v.items||[]).map(x=>({title:x.snippet.title||'',views:+(x.statistics?.viewCount||0),likes:+(x.statistics?.likeCount||0),tags:x.snippet.tags||[],publishedAt:x.snippet.publishedAt||''})),top=[...vs].sort((a,b)=>b.views-a.views).slice(0,10),wm={},tm={},hm={};top.forEach(x=>{(x.title.match(/[가-힣A-Za-z0-9]+/g)||[]).forEach(w=>{if(w.length>1&&!/^\d+$/.test(w))wm[w]=(wm[w]||0)+1});x.tags.forEach(t=>tm[t]=(tm[t]||0)+1)});vs.forEach(x=>{let d=new Date(x.publishedAt);if(!isNaN(d))hm[d.getHours()]=(hm[d.getHours()]||0)+x.views});let bestHour=Object.entries(hm).sort((a,b)=>b[1]-a[1])[0]?.[0]||'',data={sample:vs.length,kw:Object.entries(wm).sort((a,b)=>b[1]-a[1]).slice(0,15).map(x=>x[0]),tg:Object.entries(tm).sort((a,b)=>b[1]-a[1]).slice(0,15).map(x=>x[0]),top:top.slice(0,5),bestHour};let all=R(K('learning'),{});all[active]=data;W(K('learning'),all);renderLearning();setStatus('최근 영상 '+vs.length+'개 분석 완료','ok')}catch(e){setStatus('분석 실패: '+e.message,'err')}}
-function renderLearning(){let l=R(K('learning'),{})[active];if(!l){learning.textContent='아직 분석하지 않았습니다.';return}learning.innerHTML='<b>분석 영상 '+l.sample+'개</b>'+(l.bestHour!==''?'<br>조회수 합계 기준 강한 게시시간: '+l.bestHour+'시대':'')+'<div class="hr"></div><b>상위영상 반복 키워드</b><br>'+l.kw.map(x=>'<span class="badge">'+esc(x)+'</span>').join('')+'<div class="hr"></div><b>자주 사용한 태그</b><br>'+l.tg.map(x=>'<span class="badge">'+esc(x)+'</span>').join('')+'<div class="hr"></div><b>조회수 상위 영상</b><br>'+l.top.map(x=>esc(x.title)+' · '+n(x.views)).join('<br>')}
-function basicMeta(){let c=channel.value,t=topic.value.trim()||'이번 영상',d=DEF[c],l=R(K('learning'),{})[c],kw=l?.kw?.find(x=>!t.includes(x));title.value=(t+(kw?' | '+kw:'')+' '+d.suffix).slice(0,100);desc.value=t+' 관련 핵심 내용을 정리했습니다.\n\n'+d.desc;tags.value=[...new Set([...(t.match(/[가-힣A-Za-z0-9]+/g)||[]),...(l?.tg||[]),...d.tags.split(',')])].filter(x=>x.length>1).slice(0,25).join(', ');hashtags.value=[...new Set((t.match(/[가-힣A-Za-z0-9]+/g)||[]).filter(x=>x.length>1))].slice(0,4).map(x=>'#'+x).join(' ');cat.value=d.cat}
-async function aiMeta(){let key=gemkey.value.trim(),t=topic.value.trim();if(!t)return alert('영상 주제를 입력하세요.');if(!key){basicMeta();return alert('Gemini API Key가 없어 채널 학습 기반 메타를 생성했습니다. 무료 Gemini를 쓰려면 연동 설정에 키를 입력하세요.')}let c=channel.value,d=DEF[c],l=R(K('learning'),{})[c]||{};setStatus('AI가 채널 성과와 검색 의도를 반영해 메타를 작성 중…');let prompt=`한국 유튜브 채널 메타데이터 편집자 역할. 노출을 보장한다고 말하지 말고 검색 의도, 클릭률, 관련성, 채널 일관성을 높이는 방향으로 작성.\n채널:${c}\n주제:${t}\n기본설명:${d.desc}\n기본태그:${d.tags}\n최근성과:${JSON.stringify(l)}\n규칙: 제목 3안(핵심 검색어 앞쪽, 45~75자 권장, 허위/과장 금지), 설명 첫 2줄에 핵심 키워드와 시청 이유, 일반태그 15~25개, 해시태그 3~5개, 추천 공개시간, titleScore 0~100과 짧은 이유. 반드시 JSON만 반환. 형식 {"titles":["","",""],"description":"","tags":[""],"hashtags":[""],"publishTime":"","titleScore":0,"scoreReason":""}`;try{let r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key='+encodeURIComponent(key),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json',temperature:.55}})}),j=await r.json();if(!r.ok)throw Error(j.error?.message||'Gemini API 오류');let txt=(j.candidates?.[0]?.content?.parts||[]).map(x=>x.text||'').join(''),m=JSON.parse(txt.replace(/^```json\s*|\s*```$/g,''));renderAI(m);setStatus('AI 메타 생성 완료','ok')}catch(e){setStatus('AI 메타 실패: '+e.message,'err')}}
-function renderAI(m){aiBox.classList.remove('hidden');aiBox.innerHTML='<div><span class="score">'+esc(m.titleScore??'-')+'</span>/100 <span class="small">'+esc(m.scoreReason||'')+'</span></div><div class="hr"></div><b>제목 후보</b>'+(m.titles||[]).map((x,i)=>'<button class="ai-title" onclick="applyAITitle('+i+')">'+esc(x)+'</button>').join('')+'<div class="small">추천 공개시간: '+esc(m.publishTime||'-')+'</div>';window.lastAI=m;if(m.titles?.[0])title.value=m.titles[0];if(m.description)desc.value=m.description;if(Array.isArray(m.tags))tags.value=m.tags.join(', ');if(Array.isArray(m.hashtags))hashtags.value=m.hashtags.map(x=>x.startsWith('#')?x:'#'+x).join(' ')}
-function applyAITitle(i){if(window.lastAI?.titles?.[i])title.value=window.lastAI.titles[i]}
-function events(){return R(K('events'),[])}function makeEvent(){if(!date.value||!time.value)return alert('날짜와 시간을 입력하세요.'),null;if(!title.value.trim())return alert('제목을 입력하세요.'),null;return{id:Date.now(),channel:channel.value,date:date.value,time:time.value,title:title.value.trim(),desc:desc.value,tags:tags.value,hashtags:hashtags.value,privacy:privacy.value,cat:cat.value,status:'scheduled'}}
-function saveLocal(){let e=makeEvent();if(!e)return;let a=events();a.push(e);W(K('events'),a);renderCal();updateEC();setStatus('캘린더에 저장했습니다.','ok')}
-async function upload(){if(!token)return alert('먼저 YouTube를 연결하세요.');let f;try{f=await getVideoFile()}catch(e){return setStatus(e.message,'err')}if(!f)return alert('영상 파일을 선택하세요.');let e=makeEvent();if(!e)return;let s={selfDeclaredMadeForKids:false};if(e.privacy==='scheduled'){let d=new Date(e.date+'T'+e.time+':00');if(d.getTime()<Date.now()+60000)return alert('예약시간은 현재보다 최소 1분 이후여야 합니다.');s.privacyStatus='private';s.publishAt=d.toISOString()}else s.privacyStatus=e.privacy;let fullDesc=e.desc+(e.hashtags?'\n\n'+e.hashtags:'');let md={snippet:{title:e.title,description:fullDesc,tags:e.tags.split(',').map(x=>x.trim()).filter(Boolean),categoryId:e.cat},status:s};prog.textContent='YouTube 업로드 준비 중 · '+mb(f.size);try{let boundary='hamom'+Date.now(),prefix='--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(md)+'\r\n--'+boundary+'\r\nContent-Type: '+(f.type||'application/octet-stream')+'\r\n\r\n',suffix='\r\n--'+boundary+'--',body=new Blob([prefix,f,suffix]);prog.textContent='업로드 중… 브라우저를 닫지 마세요.';let j=await api('https://www.googleapis.com/upload/youtube/v3/videos?part=snippet,status&uploadType=multipart',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+boundary},body});e.youtubeId=j.id;e.status=e.privacy==='scheduled'?'scheduled':'done';let a=events();a.push(e);W(K('events'),a);let th=thumb.files[0];if(th){try{await api('https://www.googleapis.com/upload/youtube/v3/thumbnails/set?videoId='+encodeURIComponent(j.id),{method:'POST',headers:{'Content-Type':th.type||'image/jpeg'},body:th})}catch(_){} }prog.innerHTML='완료 · 영상 ID <b>'+esc(j.id)+'</b>';renderCal();updateEC();setStatus('YouTube 업로드 완료','ok')}catch(e){prog.textContent='오류: '+e.message;setStatus('업로드 실패: '+e.message,'err')}}
-function renderCal(){cal.innerHTML='';['일','월','화','수','목','금','토'].forEach(x=>{let d=document.createElement('div');d.className='dn';d.textContent=x;cal.appendChild(d)});let y=viewDate.getFullYear(),m=viewDate.getMonth();mt.textContent=y+'년 '+(m+1)+'월';let first=new Date(y,m,1),start=new Date(y,m,1-first.getDay()),arr=events().filter(e=>e.channel===active),td=ds(new Date());for(let i=0;i<42;i++){let d=new Date(start);d.setDate(start.getDate()+i);let s=ds(d),b=document.createElement('div');b.className='day'+(d.getMonth()!==m?' out':'')+(s===td?' today':'');b.onclick=()=>date.value=s;b.innerHTML='<b>'+d.getDate()+'</b>';arr.filter(e=>e.date===s).sort((a,b)=>a.time.localeCompare(b.time)).slice(0,4).forEach(e=>{let x=document.createElement('div');x.className='ev '+(e.status||'');x.textContent=e.time+' '+e.title;b.appendChild(x)});cal.appendChild(b)}}
-function mv(x){viewDate=new Date(viewDate.getFullYear(),viewDate.getMonth()+x,1);renderCal()}function today(){viewDate=new Date();renderCal()}function updateEC(){ec.textContent=events().filter(e=>e.channel===active).length}
-function backup(){let p={version:3,exportedAt:new Date().toISOString(),events:events(),learning:R(K('learning'),{})};let b=new Blob([JSON.stringify(p,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='HAMOM_YouTube_Manager_v3_'+ds(new Date())+'.json';a.click();URL.revokeObjectURL(a.href)}
-function restoreData(ev){let f=ev.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let p=JSON.parse(r.result);if(p.events)W(K('events'),p.events);if(p.learning)W(K('learning'),p.learning);renderCal();renderLearning();updateEC();setStatus('백업 복원 완료','ok')}catch(e){alert('복원 실패: '+e.message)}};r.readAsText(f,'utf-8')}
-function ds(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}function n(v){return Number(v||0).toLocaleString('ko-KR')}function mb(v){return (Number(v||0)/1024/1024).toFixed(1)+'MB'}function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+'하맘스튜디오':{suffix:'| 콘텐츠 제작',desc:"영상과 콘텐츠 제작 정보를 소개합니다.\n\n컨텐츠 문의: 카카오톡 '하맘'",tags:'영상제작,콘텐츠제작,숏폼,하맘스튜디오',cat:'28'}
+};
+let active=CH[0],viewDate=new Date(),token='',tokenClient=null,yt=null,driveFile=null;
+const $=id=>document.getElementById(id),K=x=>'hamom_v31_'+x;
+const R=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
+const W=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+function setStatus(t,c=''){const el=$('status');el.textContent=t;el.className='status '+c}
+function init(){
+  $('date').value=ds(new Date());
+  renderTabs();renderCal();renderLearning();updateEC();
+}
+function renderTabs(){
+  $('tabs').innerHTML='';$('channel').innerHTML='';
+  CH.forEach(c=>{
+    const b=document.createElement('button');b.className='tab '+(c===active?'on':'');b.textContent=c;b.onclick=()=>{active=c;renderTabs();renderCal();renderLearning();updateEC()};$('tabs').appendChild(b);
+    const o=document.createElement('option');o.value=c;o.textContent=c;$('channel').appendChild(o);
+  });
+  $('channel').value=active;
+}
+function origin(){alert('현재 접속 주소: '+location.origin)}
+function connect(){
+  const c=OAUTH_CLIENT_ID;
+  if(!window.google?.accounts?.oauth2)return alert('Google 로그인 모듈 로딩 중입니다.');
+  tokenClient=google.accounts.oauth2.initTokenClient({
+    client_id:c,
+    scope:'https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/drive.readonly',
+    callback:async r=>{if(r.error)return setStatus('인증 실패: '+r.error,'err');token=r.access_token;await loadYT();}
+  });
+  tokenClient.requestAccessToken({prompt:'consent'});
+}
+async function api(u,o={}){
+  o.headers=Object.assign({},o.headers||{},token?{Authorization:'Bearer '+token}:{});
+  const r=await fetch(u,o),t=await r.text();let j={};try{j=JSON.parse(t)}catch{}
+  if(!r.ok)throw Error(j.error?.message||t||'API 오류');return j;
+}
+async function loadYT(){
+  try{
+    const j=await api('https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&mine=true');
+    yt=j.items?.[0];if(!yt)throw Error('채널을 찾지 못했습니다.');
+    $('info').innerHTML='<b>'+esc(yt.snippet.title)+'</b><br>'+esc(yt.id);
+    $('sub').textContent=n(yt.statistics.subscriberCount);$('vc').textContent=n(yt.statistics.videoCount);$('views').textContent=n(yt.statistics.viewCount);
+    const avatar=yt.snippet?.thumbnails?.high?.url||yt.snippet?.thumbnails?.medium?.url||yt.snippet?.thumbnails?.default?.url||'';
+    if(avatar){$('accountAvatar').src=avatar;$('accountAvatar').style.display='block'}else{$('accountAvatar').style.display='none'}
+    $('accountName').textContent=yt.snippet.title||'YouTube 채널';
+    $('accountChip').classList.add('show');
+    setStatus('YouTube 연결 완료: '+yt.snippet.title,'ok');
+  }catch(e){setStatus('연결 실패: '+e.message,'err')}
+}
+async function learn(){
+  if(!token||!yt)return alert('먼저 YouTube를 연결하세요.');
+  try{
+    setStatus('최근 영상 분석 중...');
+    const pl=yt.contentDetails.relatedPlaylists.uploads;
+    const p=await api('https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&maxResults=50&playlistId='+encodeURIComponent(pl));
+    const ids=(p.items||[]).map(x=>x.contentDetails.videoId).filter(Boolean);
+    const v=await api('https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id='+ids.join(','));
+    const vs=(v.items||[]).map(x=>({title:x.snippet.title,views:+(x.statistics.viewCount||0),tags:x.snippet.tags||[],publishedAt:x.snippet.publishedAt||''}));
+    const top=[...vs].sort((a,b)=>b.views-a.views).slice(0,10),wm={},tm={};
+    top.forEach(x=>{(x.title.match(/[가-힣A-Za-z0-9]+/g)||[]).forEach(w=>{if(w.length>1)wm[w]=(wm[w]||0)+1});x.tags.forEach(t=>tm[t]=(tm[t]||0)+1)});
+    const data={sample:vs.length,kw:Object.entries(wm).sort((a,b)=>b[1]-a[1]).slice(0,15).map(x=>x[0]),tg:Object.entries(tm).sort((a,b)=>b[1]-a[1]).slice(0,15).map(x=>x[0]),top:top.slice(0,5)};
+    const all=R(K('learning'),{});all[active]=data;W(K('learning'),all);renderLearning();setStatus('최근 영상 '+vs.length+'개 분석 완료','ok');
+  }catch(e){setStatus('분석 실패: '+e.message,'err')}
+}
+function renderLearning(){
+  const l=R(K('learning'),{})[active];
+  if(!l)return $('learning').textContent='아직 분석하지 않았습니다.';
+  $('learning').innerHTML='분석 영상 '+l.sample+'개<br><b>반복 키워드</b><br>'+l.kw.map(x=>'<span class="badge">'+esc(x)+'</span>').join('')+'<br><br><b>자주 쓴 태그</b><br>'+l.tg.map(x=>'<span class="badge">'+esc(x)+'</span>').join('')+'<br><br><b>조회수 상위 영상</b><br>'+l.top.map(x=>esc(x.title)+' · '+n(x.views)).join('<br>');
+}
+function basicMeta(){
+  const c=$('channel').value,t=$('topic').value.trim()||'이번 영상',d=DEF[c],l=R(K('learning'),{})[c];
+  const kw=(l?.kw||[]).find(x=>!t.includes(x));
+  $('title').value=(t+' '+d.suffix+(kw?' | '+kw:'')).slice(0,100);
+  $('desc').value=t+' 관련 핵심 내용을 정리했습니다.\n\n'+d.desc;
+  $('tags').value=[...new Set([...(t.match(/[가-힣A-Za-z0-9]+/g)||[]),...(l?.tg||[]),...d.tags.split(',')])].slice(0,30).join(', ');
+  $('hashtags').value=[...new Set((t.match(/[가-힣A-Za-z0-9]+/g)||[]).filter(x=>x.length>1).slice(0,5))].map(x=>'#'+x).join(' ');
+  $('cat').value=d.cat;
+}
+async function aiMeta(){
+  basicMeta();
+  $('aiBox').classList.remove('hidden');
+  $('aiBox').innerHTML='채널 분석 데이터를 바탕으로 메타를 생성했습니다. AI 서버 연동은 판매형 버전에서 서버 측으로 연결됩니다.';
+}
+function useTitle(i){if(window.__aiTitles?.[i])$('title').value=window.__aiTitles[i]}
+function localSelected(){const f=$('video').files[0];driveFile=null;$('videoSelected').textContent=f?f.name+' · '+mb(f.size):'선택된 영상 없음'}
+function pickDrive(){
+  if(!token)return alert('먼저 Google / YouTube 연결을 해주세요.');
+  alert('Google Drive 선택 기능은 다음 단계에서 Picker API 설정 후 활성화할 수 있습니다. 현재는 내 PC 파일 선택을 사용하세요.');
+}
+function events(){return R(K('events'),[])}
+function makeEvent(){
+  if(!$('date').value||!$('time').value)return alert('날짜와 시간을 입력하세요.'),null;
+  if(!$('title').value.trim())return alert('제목을 입력하세요.'),null;
+  return{id:Date.now(),channel:$('channel').value,date:$('date').value,time:$('time').value,title:$('title').value.trim(),desc:$('desc').value,tags:$('tags').value,hashtags:$('hashtags').value,privacy:$('privacy').value,cat:$('cat').value,status:'scheduled'};
+}
+function saveLocal(){const e=makeEvent();if(!e)return;const a=events();a.push(e);W(K('events'),a);renderCal();updateEC();setStatus('캘린더 저장 완료','ok')}
+async function upload(){
+  if(!token)return alert('YouTube 연결이 필요합니다.');
+  const f=$('video').files[0];if(!f)return alert('영상 파일을 선택하세요.');
+  const e=makeEvent();if(!e)return;
+  let s={selfDeclaredMadeForKids:false};
+  if(e.privacy==='scheduled'){const d=new Date(e.date+'T'+e.time+':00');if(d.getTime()<Date.now()+60000)return alert('예약시간을 현재보다 이후로 설정하세요.');s.privacyStatus='private';s.publishAt=d.toISOString()}else s.privacyStatus=e.privacy;
+  const fullDesc=(e.desc||'')+(e.hashtags?'\n\n'+e.hashtags:'');
+  const md={snippet:{title:e.title,description:fullDesc,tags:e.tags.split(',').map(x=>x.trim()).filter(Boolean),categoryId:e.cat},status:s};
+  $('prog').textContent='YouTube 업로드 중... '+mb(f.size);
+  try{
+    const boundary='hamom'+Date.now();
+    const prefix='--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(md)+'\r\n--'+boundary+'\r\nContent-Type: '+(f.type||'application/octet-stream')+'\r\n\r\n';
+    const suffix='\r\n--'+boundary+'--';
+    const j=await api('https://www.googleapis.com/upload/youtube/v3/videos?part=snippet,status&uploadType=multipart',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+boundary},body:new Blob([prefix,f,suffix])});
+    e.youtubeId=j.id;e.status=e.privacy==='scheduled'?'scheduled':'done';const a=events();a.push(e);W(K('events'),a);renderCal();updateEC();
+    $('prog').textContent='업로드 완료 · 영상 ID: '+j.id;setStatus('YouTube 업로드 완료','ok');
+  }catch(err){$('prog').textContent='업로드 실패: '+err.message;setStatus('업로드 실패: '+err.message,'err')}
+}
+function renderCal(){
+  const cal=$('cal');cal.innerHTML='';['일','월','화','수','목','금','토'].forEach(x=>{const d=document.createElement('div');d.className='dn';d.textContent=x;cal.appendChild(d)});
+  const y=viewDate.getFullYear(),m=viewDate.getMonth();$('mt').textContent=y+'년 '+(m+1)+'월';
+  const first=new Date(y,m,1),start=new Date(y,m,1-first.getDay()),todayS=ds(new Date()),arr=events().filter(e=>e.channel===active);
+  for(let i=0;i<42;i++){const d=new Date(start);d.setDate(start.getDate()+i);const s=ds(d);const box=document.createElement('div');box.className='day'+(d.getMonth()!==m?' out':'')+(s===todayS?' today':'');box.innerHTML='<b>'+d.getDate()+'</b>';box.onclick=()=>{$('date').value=s};arr.filter(e=>e.date===s).sort((a,b)=>a.time.localeCompare(b.time)).slice(0,5).forEach(e=>{const v=document.createElement('div');v.className='ev '+(e.status||'');v.textContent=e.time+' '+e.title;box.appendChild(v)});cal.appendChild(box)}
+}
+function mv(n){viewDate=new Date(viewDate.getFullYear(),viewDate.getMonth()+n,1);renderCal()}function today(){viewDate=new Date();renderCal()}
+function updateEC(){$('ec').textContent=events().filter(e=>e.channel===active).length}
+function backup(){
+  const p={version:'3.1',exportedAt:new Date().toISOString(),events:events(),learning:R(K('learning'),{})};const b=new Blob([JSON.stringify(p,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='HAMOM_YouTube_Backup_'+ds(new Date())+'.json';a.click();URL.revokeObjectURL(a.href);
+}
+function restoreData(ev){const f=ev.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const p=JSON.parse(r.result);if(p.events)W(K('events'),p.events);if(p.learning)W(K('learning'),p.learning);renderCal();renderLearning();updateEC();setStatus('백업 복원 완료','ok')}catch(e){alert('복원 실패: '+e.message)}};r.readAsText(f,'utf-8')}
+function ds(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function n(v){return Number(v||0).toLocaleString('ko-KR')}
+function mb(v){return (Number(v||0)/1024/1024).toFixed(1)+'MB'}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 window.addEventListener('load',init);
-</script></body></html>
+</script>
+</body>
+</html>
