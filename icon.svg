@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<rect width="512" height="512" rx="110" fill="#20242a"/>
+<rect x="92" y="145" width="328" height="222" rx="55" fill="#e62117"/>
+<path d="M224 203l105 53-105 53z" fill="white"/>
+<text x="256" y="430" font-family="Arial,sans-serif" font-size="52" font-weight="700" fill="white" text-anchor="middle">HAMOM</text>
+</svg>
